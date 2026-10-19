@@ -162,3 +162,20 @@ Después de instalar `libssl-dev` en WSL (Ubuntu), se compilaron correctamente `
 | 255 | `LLAVE=255`, `VERIFICACION=CORRECTA`, salida 0 | `LLAVE=255`, `VERIFICACION=CORRECTA`, salida 0 |
 
 La prueba MPI con llave 63 mostró los intervalos `[0,64)`, `[64,128)`, `[128,192)` y `[192,256)`. La observación anterior de que no se podían compilar o ejecutar los programas correspondía al entorno Windows inicial; esta prueba posterior en WSL la reemplaza. Los tiempos de esta prueba breve no constituyen una medición de rendimiento o speedup.
+
+## Comparación explícita entre el código original y la versión adaptada
+
+El `bruteforce_.c` entregado inicialmente fue el punto de partida, **pero no es el archivo que produjo los resultados de la tabla anterior**. Se reemplazó por una versión secuencial adaptada, cuyo código está actualmente en `bruteforce_.c`. La paralelización que se probó corresponde a `bruteforce_mpi.c`. Se deja esta distinción para no presentar una prueba de la versión adaptada como si fuera una ejecución del programa original.
+
+| Aspecto | `bruteforce_.c` original  | Versión adaptada y probada |
+|---|---|---|
+| Entrada | Texto definido en el arreglo `eltexto` dentro del código. | Lee `texto_plano.txt`, el texto de 355 palabras usado en el proyecto. |
+| Llave y rango | Llave fija `18014398509481984` (`2^54`) y búsqueda hasta `2^56`; sin parámetros para una prueba breve. | Parámetros `--key` y `--limit`, con rango acotado y validación `0 <= key < limit <= 2^56`. |
+| Cifrado DES | `encrypt` y `decrypt` procesan solo 16 bytes, aunque `ciphlen` representa un texto más largo. | Prepara la longitud en bloques de ocho bytes y cifra o descifra **todos** los bloques. |
+| Comprobación de llave | Busca ` los mismos del proyecto 1 `; esa frase aparece después de los primeros 16 bytes, que permanecían sin cifrar, por lo que encontrarla no demostraba que la llave probada fuera correcta. | Busca la frase de validación dentro del texto descifrado y compara la llave hallada con la utilizada para cifrar mediante `VERIFICACION=CORRECTA`. |
+| Biblioteca DES | Llama a `des_setparity` y `ecb_crypt` del encabezado RPC. En este WSL, el enlace con `-ltirpc` dejó referencias indefinidas a ambas funciones. | Usa `DES_set_odd_parity`, `DES_set_key_unchecked` y `DES_ecb_encrypt` de OpenSSL, enlazadas con `-lcrypto`. |
+| MPI | El original ya contenía llamadas MPI y asignaba grandes intervalos a procesos; no era una referencia secuencial. | `bruteforce_.c` quedó como referencia secuencial; `bruteforce_mpi.c` distribuye intervalos disjuntos y comunica los hallazgos mediante `MPI_Allreduce`. |
+
+La modificación se hizo para poder comprobar el cifrado y la búsqueda con el **mismo archivo de texto**, evitar que una frase sin cifrar diera falsos positivos y disponer de llaves pequeñas que permitan repetir los ensayos. Al intentar compilar posteriormente una copia restaurada del original, también se observó un error de sintaxis porque el literal `eltexto` estaba cortado entre varias líneas sin concatenación válida en C. Esa copia no llegó a ejecutarse. Los resultados `LLAVE=0`, `LLAVE=63` y `LLAVE=255` documentados arriba corresponden exclusivamente a la versión adaptada y a `bruteforce_mpi.c`, ejecutadas en WSL; **no prueban el funcionamiento del código original sin cambios**.
+
+Para reproducir las pruebas de la versión adaptada actual se compila `bruteforce_.c` con `gcc -std=c11 -O2 bruteforce_.c -lcrypto -o bruteforce_serial` y `bruteforce_mpi.c` con `mpicc -std=c11 -O2 bruteforce_mpi.c -lcrypto -o bruteforce_mpi`. Los comandos anteriores con `-ltirpc` documentan un intento previo y no corresponden al backend DES actual.
