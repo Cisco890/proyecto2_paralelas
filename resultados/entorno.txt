@@ -1,0 +1,16 @@
+sistema=Linux-7.2.6-200.fc44.x86_64-x86_64-with-glibc2.43
+cpu=AMD Ryzen AI 7 350 w/ Radeon 860M
+cpus_logicos=16
+nucleos_fisicos=8
+hilos_por_nucleo=2
+reloj_max_cpus_pares_khz=5090910
+reloj_max_cpus_impares_khz=3506494
+afinidad_secuencial=taskset -c 0
+afinidad_mpi_hasta_8=--bind-to core --map-by core
+afinidad_mpi_16=--bind-to hwthread --map-by hwthread
+limite=524288
+repeticiones=5
+bloque=4096
+secuencial=bruteforce_.c compilado con gcc -std=c11 -O2 -lcrypto
+paralelo=bruteforce_mpi.c compilado con mpicc -std=c11 -O2 -lcrypto
+tiempo=solo el ciclo de búsqueda (MPI_Wtime o timespec_get)
