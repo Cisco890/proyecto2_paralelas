@@ -28,7 +28,8 @@ RUN gcc -std=c11 -O2 bruteforce_.c -lcrypto -o bruteforce_serial \
     && mpicc -std=c11 -O2 bruteforce_mpi.c -lcrypto -o bruteforce_mpi
 
 COPY docker/entrypoint.sh /usr/local/bin/mpi-entrypoint
-RUN chmod 755 /usr/local/bin/mpi-entrypoint
+COPY scripts/init-ssh.sh scripts/check-ssh.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/mpi-entrypoint /usr/local/bin/init-ssh.sh /usr/local/bin/check-ssh.sh
 
 ENV OMPI_ALLOW_RUN_AS_ROOT=1
 ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
