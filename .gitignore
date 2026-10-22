@@ -1,2 +1,76 @@
-bruteforce_mpi
-bruteforce_serial
+# Ejecutables y archivos generados al compilar
+/bruteforce_mpi
+/bruteforce_serial
+/build/
+/dist/
+*.o
+*.obj
+*.a
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+a.out
+
+# Python: entornos locales y caché
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.cache/
+.pytest_cache/
+
+# Variables de entorno y credenciales (conservar plantillas sin secretos)
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+.aws/
+.ssh/
+/secrets/
+/credentials/
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+id_rsa*
+id_ed25519*
+id_ecdsa*
+id_dsa*
+ssh_host_*
+authorized_keys
+known_hosts
+known_hosts.old
+
+# Configuración real del laboratorio; conservar el ejemplo público
+/cluster/cluster_hosts
+/cluster/cluster_hosts.*
+!/cluster/cluster_hosts.example
+/cluster_hosts
+
+# Imágenes Docker exportadas
+mpi-cluster-image*.tar
+mpi-cluster-image*.tar.gz
+*.docker.tar
+
+# Herramientas y configuración local
+.agents/
+.codex/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs, temporales y archivos de respaldo
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# Los fuentes, documentación, CSV y figuras de resultados/ sí se versionan.

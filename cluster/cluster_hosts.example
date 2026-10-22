@@ -1,0 +1,7 @@
+# EJEMPLO: reemplazar con las IP reales del router de laboratorio.
+# No ejecutar este archivo contra estas direcciones sin sustituirlas.
+# Ajustar slots y max_slots a los recursos disponibles de cada nodo.
+# max_slots (con guion bajo) es la sintaxis de hostfile de OpenMPI 4.1.
+# No se habilita oversubscription.
+192.168.1.10 slots=4 max_slots=4
+192.168.1.11 slots=4 max_slots=4

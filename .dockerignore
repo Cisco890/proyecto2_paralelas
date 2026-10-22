@@ -1,0 +1,12 @@
+# Lista de inclusión: excluye todo salvo los archivos necesarios para construir.
+# Quedan fuera .git, .agents, .aws, .codex, .venv, __pycache__, *.pyc,
+# ejecutables locales, resultados/, figuras, reportes e intermediarios.
+**
+!Dockerfile
+!.dockerignore
+!bruteforce_.c
+!bruteforce_mpi.c
+!texto_plano.txt
+!docker/
+docker/**
+!docker/entrypoint.sh

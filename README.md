@@ -91,3 +91,15 @@ El speedup depende de dónde cae la llave dentro del reparto:
 | 524287, última llave del límite | 1.33 | 2.50 | 4.56 | 7.60 |
 
 Con la llave 262144 el speedup de 38 supera por mucho a los dos procesos: el secuencial recorre 262145 candidatas y el paralelo la encuentra en el primer bloque de 4096. Con la llave final el reparto sí es exhaustivo. El speedup crece con los procesos y queda por debajo de la cantidad de procesos, porque cada bloque espera al núcleo más lento. El detalle, las tablas completas y las gráficas están en `informe.md`.
+
+## Ejecución con Docker
+
+Para compilar y ejecutar en Ubuntu 22.04 con OpenMPI, OpenSSL y SSH:
+
+```bash
+docker build -t mpi-cluster-image .
+docker run --rm mpi-cluster-image ./bruteforce_serial --key 63 --limit 256
+docker run --rm mpi-cluster-image mpirun -np 4 ./bruteforce_mpi --key 63 --limit 256
+```
+
+Ambas pruebas deben mostrar `LLAVE=63` y `VERIFICACION=CORRECTA`. La guía [docker/README.md](docker/README.md) documenta las pruebas de MPI y SSH, los resultados de validación local y la preparación para una LAN privada. El clúster físico requiere pruebas posteriores entre equipos.
