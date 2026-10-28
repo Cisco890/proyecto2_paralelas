@@ -1,0 +1,4 @@
+# Los scripts se ejecutan en Linux, tambien al clonar desde Windows.
+*.sh text eol=lf
+# El README existente conserva finales CRLF.
+README.md whitespace=cr-at-eol

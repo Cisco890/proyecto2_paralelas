@@ -11,6 +11,13 @@ chmod 700 "$ssh_dir"
 touch "$authorized_keys"
 chmod 600 "$authorized_keys"
 
+# Un volumen nuevo sobre .ssh oculta la configuracion incluida en la imagen.
+# Restaurar el ajuste del laboratorio sin sobrescribir una configuracion propia.
+if [ ! -e "$ssh_dir/config" ]; then
+    printf '%s\n' 'Host *' '    StrictHostKeyChecking no' > "$ssh_dir/config"
+    chmod 600 "$ssh_dir/config"
+fi
+
 if [ ! -f "$key_path" ]; then
     ssh-keygen -q -t "$key_type" -N "" -f "$key_path"
 fi
@@ -42,7 +49,9 @@ if [ -n "${SSH_PUBLIC_KEY_FILE:-}" ] && [ -f "$SSH_PUBLIC_KEY_FILE" ]; then
 fi
 
 if ! pgrep -x sshd >/dev/null 2>&1; then
-    /usr/sbin/sshd
+    ssh-keygen -A
+    /usr/sbin/sshd -t
+    /usr/sbin/sshd -p "${SSH_PORT:-22}"
 fi
 
 echo "SSH inicializado. Clave publica disponible en $key_path.pub"

@@ -1,5 +1,11 @@
 # DES y OpenMPI en Docker
 
+Para conectar los equipos Windows y Linux, seguir primero
+[Conectar equipos Windows y Linux](CONEXION_LAN.md). El arranque con
+`docker compose up -d --build` publica SSH en **2222**, conserva las claves y
+mantiene el nodo activo. Esa guia distingue la prueba SSH de la red necesaria
+para MPI y documenta el uso de `SSH_PORT=2222` con red host en Linux.
+
 Esta preparación corresponde a la fase de virtualización y deja documentada la futura conexión por LAN. Se compilan los dos programas actuales con OpenSSL, conservando el algoritmo, el texto de prueba y los resultados originales. El benchmark y sus datos no se copian a la imagen.
 
 ## Construir y comprobar
@@ -117,7 +123,7 @@ No se ha ejecutado como prueba del clúster. En Linux nativo comparte la red del
 
 Docker Desktop para Windows/macOS requiere una versión compatible y activar la función de red host; su comportamiento no equivale completamente al Linux nativo. Publicar solo SSH con `-p` en bridge tampoco resuelve por sí solo las conexiones adicionales de MPI. Consultar la [documentación oficial de red host](https://docs.docker.com/engine/network/drivers/host/).
 
-## Preparar el clúster físico (todavía no ejecutar)
+## Preparar el clúster físico (requiere configurar la LAN real)
 
 1. Conectar los equipos a la misma LAN privada, comprobar sus IP reales y elegir el maestro. Mantener los contenedores en ejecución durante las pruebas.
 2. Construir la imagen en cada nodo y comprobar las versiones de OpenMPI, las rutas `/app` y los archivos de entrada. Se requiere una instalación MPI compatible en todos los nodos.

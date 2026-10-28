@@ -1,0 +1,19 @@
+# Acceso SSH entre Windows/Linux. Para MPI por LAN, ver docker/CONEXION_LAN.md.
+services:
+  nodo:
+    build: .
+    image: mpi-cluster-image
+    ports:
+      - "${SSH_BIND_IP:-0.0.0.0}:${SSH_HOST_PORT:-2222}:22"
+    volumes:
+      - ssh:/root/.ssh
+    command: ["/bin/sh", "-ec", "init-ssh.sh; exec sleep infinity"]
+    healthcheck:
+      test: ["CMD", "check-ssh.sh", "localhost"]
+      interval: 10s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
+
+volumes:
+  ssh:

@@ -6,6 +6,15 @@ ssh_dir="${HOME:-/root}/.ssh"
 key_path="${SSH_KEY_PATH:-$ssh_dir/id_rsa}"
 ssh_user="${SSH_USER:-root}"
 connect_timeout="${SSH_CONNECT_TIMEOUT:-8}"
+ssh_port="${2:-${SSH_PORT:-22}}"
+
+case "$ssh_port" in
+    ''|*[!0-9]*) echo "ERROR: el puerto SSH debe ser un numero entre 1 y 65535." >&2; exit 2 ;;
+esac
+if [ "$ssh_port" -lt 1 ] || [ "$ssh_port" -gt 65535 ]; then
+    echo "ERROR: el puerto SSH debe estar entre 1 y 65535." >&2
+    exit 2
+fi
 
 if [ ! -f "$key_path" ]; then
     echo "ERROR: no existe la clave privada $key_path; ejecute init-ssh.sh primero." >&2
@@ -13,6 +22,7 @@ if [ ! -f "$key_path" ]; then
 fi
 
 ssh \
+    -p "$ssh_port" \
     -i "$key_path" \
     -o BatchMode=yes \
     -o IdentitiesOnly=yes \

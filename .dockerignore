@@ -10,3 +10,7 @@
 !docker/
 docker/**
 !docker/entrypoint.sh
+!scripts/
+scripts/**
+!scripts/init-ssh.sh
+!scripts/check-ssh.sh

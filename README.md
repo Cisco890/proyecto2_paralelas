@@ -94,6 +94,11 @@ Con la llave 262144 el speedup de 38 supera por mucho a los dos procesos: el sec
 
 ## Ejecución con Docker
 
+Para conectar computadoras Windows y Linux, seguir la
+[guía de conexión por LAN](docker/CONEXION_LAN.md). En cada equipo,
+`docker compose up -d --build` deja un nodo SSH activo en el puerto **2222**.
+La guía explica el intercambio de claves y la configuración adicional de MPI.
+
 Para compilar y ejecutar en Ubuntu 22.04 con OpenMPI, OpenSSL y SSH:
 
 ```bash
